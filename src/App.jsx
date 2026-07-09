@@ -29,7 +29,7 @@ import AccessPage from "./pages/AccessPage";
 export default function App() {
   const [role, setRole] = useState("Admin");
   const [page, setPage] = useState("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [requirements, setRequirements] = useState(initialRequirements);
   const [quotations, setQuotations] = useState(initialQuotations);
