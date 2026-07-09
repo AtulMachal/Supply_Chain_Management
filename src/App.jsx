@@ -65,7 +65,7 @@ export default function App() {
         />
 
         <main className="min-h-0 flex-1 overflow-y-auto p-5">
-          {page === "dashboard" && <Dashboard requirements={requirements} pos={pos} stock={stock} siteFilter={siteFilter} />}
+          {page === "dashboard" && <Dashboard requirements={requirements} pos={pos} stock={stock} siteFilter={siteFilter} setPage={setPage} />}
           {page === "requirements" && (perms.requirements ? (
             <RequirementsPage requirements={requirements} setRequirements={setRequirements} siteFilter={siteFilter} />
           ) : <Locked />)}

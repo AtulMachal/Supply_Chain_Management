@@ -1,18 +1,46 @@
-import React from "react";
-import { ClipboardList, ShoppingCart, Wallet, Boxes, AlertTriangle, MapPin } from "lucide-react";
-import { SITES } from "../data/mockData";
-import { siteName, itemName, itemUnit, vendorName } from "../utils/helpers";
+import React, { useState } from "react";
+import { ClipboardList, ShoppingCart, Wallet, Boxes, AlertTriangle, MapPin, Eye } from "lucide-react";
+import { SITES, PIPELINE_STAGES } from "../data/mockData";
+import { siteName, itemName, itemUnit, vendorName, inr } from "../utils/helpers";
+import { getStageFromRequirement, getStageFromPO } from "../utils/pipelineLogic";
 import Badge from "../components/common/Badge";
 import Card from "../components/common/Card";
 import PipelineTracker from "../components/common/PipelineTracker";
 import Kpi from "../components/common/Kpi";
+import Modal from "../components/common/Modal";
 
-export default function Dashboard({ requirements, pos, stock, siteFilter }) {
+export default function Dashboard({ requirements, pos, stock, siteFilter, setPage }) {
+  const [selectedStage, setSelectedStage] = useState(null);
+
   const reqs = requirements.filter((r) => siteFilter === "ALL" || r.site === siteFilter);
+  const filteredPOs = pos.filter((p) => siteFilter === "ALL" || p.site === siteFilter);
+
   const pendingApproval = pos.filter((p) => p.status === "Pending Approval").length;
   const shortage = stock.filter((s) => s.qty < s.min);
   const pendingPayments = pos.filter((p) => p.paymentStatus !== "Paid").length;
   const openReqs = reqs.filter((r) => r.status !== "PO Created").length;
+
+  // Calculate pipeline stages
+  const stageCounts = new Array(PIPELINE_STAGES.length).fill(0);
+  let maxStage = 0;
+
+  reqs.forEach((r) => {
+    const stage = getStageFromRequirement(r);
+    stageCounts[stage]++;
+    if (stage > maxStage) maxStage = stage;
+  });
+
+  filteredPOs.forEach((p) => {
+    const stage = getStageFromPO(p);
+    stageCounts[stage]++;
+    if (stage > maxStage) maxStage = stage;
+  });
+
+  // Items for modal
+  const itemsInSelectedStage = selectedStage !== null ? [
+    ...reqs.filter((r) => getStageFromRequirement(r) === selectedStage).map(r => ({ ...r, type: 'Requirement' })),
+    ...filteredPOs.filter((p) => getStageFromPO(p) === selectedStage).map(p => ({ ...p, type: 'PO' }))
+  ] : [];
 
   return (
     <div className="space-y-5">
@@ -22,14 +50,18 @@ export default function Dashboard({ requirements, pos, stock, siteFilter }) {
       </div>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Kpi icon={ClipboardList} label="Open Requirements" value={openReqs} hint="Not yet converted to PO" tone="indigo" />
-        <Kpi icon={ShoppingCart} label="POs Pending Approval" value={pendingApproval} hint="Awaiting admin sign-off" tone="amber" />
-        <Kpi icon={Wallet} label="Payments Pending" value={pendingPayments} hint="Across active purchase orders" tone="rose" />
-        <Kpi icon={Boxes} label="Shortage Items" value={shortage.length} hint="Below minimum stock level" tone="emerald" />
+        <Kpi onClick={() => setPage("requirements")} icon={ClipboardList} label="Open Requirements" value={openReqs} hint="Not yet converted to PO" tone="indigo" />
+        <Kpi onClick={() => setPage("po")} icon={ShoppingCart} label="POs Pending Approval" value={pendingApproval} hint="Awaiting admin sign-off" tone="amber" />
+        <Kpi onClick={() => setPage("payments")} icon={Wallet} label="Payments Pending" value={pendingPayments} hint="Across active purchase orders" tone="rose" />
+        <Kpi onClick={() => setPage("stock")} icon={Boxes} label="Shortage Items" value={shortage.length} hint="Below minimum stock level" tone="emerald" />
       </div>
 
-      <Card title="Procurement pipeline" subtitle="Where the most advanced order in the system currently stands">
-        <PipelineTracker activeIndex={5} />
+      <Card title="Procurement pipeline" subtitle="Where the most advanced order in the system currently stands. Click a stage to view items.">
+        <PipelineTracker 
+          activeIndex={maxStage} 
+          stageCounts={stageCounts}
+          onStageClick={(i) => setSelectedStage(i)} 
+        />
       </Card>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
@@ -89,6 +121,43 @@ export default function Dashboard({ requirements, pos, stock, siteFilter }) {
           </div>
         </Card>
       )}
+
+      <Modal open={selectedStage !== null} onClose={() => setSelectedStage(null)} title={selectedStage !== null ? PIPELINE_STAGES[selectedStage] : ""} wide>
+        <div className="space-y-4">
+          <p className="text-sm text-slate-500">Items currently at this stage of the procurement pipeline:</p>
+          {itemsInSelectedStage.length === 0 ? (
+            <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 py-8 text-center text-sm text-slate-500">
+              No items currently at this stage.
+            </div>
+          ) : (
+            <div className="divide-y divide-slate-100 rounded-lg border border-slate-200 bg-white shadow-sm">
+              {itemsInSelectedStage.map((item) => (
+                <div key={item.id} className="flex items-center justify-between p-4 text-sm">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className="font-semibold text-slate-700">{item.id}</p>
+                      <Badge tone={item.type === "PO" ? "indigo" : "emerald"}>{item.type}</Badge>
+                      <Badge>{item.status}</Badge>
+                    </div>
+                    <p className="mt-1 text-xs text-slate-500">
+                      <MapPin className="mb-0.5 inline h-3 w-3" /> {siteName(item.site)}
+                      {item.vendor && ` · Vendor: ${vendorName(item.vendor)}`}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    {item.type === 'Requirement' ? (
+                      <p className="font-semibold text-slate-700">{item.qty} {itemUnit(item.item)} {itemName(item.item)}</p>
+                    ) : (
+                      <p className="font-semibold text-slate-700">{item.items?.length} Items · {inr(item.amountPaid)}</p>
+                    )}
+                    <p className="text-[11px] text-slate-400">Created: {item.createdOn}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 }

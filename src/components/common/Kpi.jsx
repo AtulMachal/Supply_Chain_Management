@@ -1,5 +1,5 @@
 import React from "react";
-export default function Kpi({ icon: Icon, label, value, hint, tone = "indigo" }) {
+export default function Kpi({ icon: Icon, label, value, hint, tone = "indigo", onClick }) {
   const tones = {
     indigo: "bg-indigo-50 text-indigo-600",
     amber: "bg-amber-50 text-amber-600",
@@ -7,7 +7,10 @@ export default function Kpi({ icon: Icon, label, value, hint, tone = "indigo" })
     rose: "bg-rose-50 text-rose-600",
   };
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div 
+      onClick={onClick}
+      className={`rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all ${onClick ? "cursor-pointer hover:border-indigo-300 hover:shadow-md" : ""}`}
+    >
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-slate-500">{label}</span>
         <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${tones[tone]}`}>
