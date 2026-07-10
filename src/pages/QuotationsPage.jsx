@@ -8,7 +8,7 @@ import Modal from "../components/common/Modal";
 import FileDrop from "../components/common/FileDrop";
 import EmptyState from "../components/common/EmptyState";
 
-export default function QuotationsPage({ requirements, quotations, setQuotations, setPOs, setRequirements, sites }) {
+export default function QuotationsPage({ requirements, quotations, setQuotations, setPOs, setRequirements }) {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [sort, setSort] = useState({ key: "item", dir: "asc" });
   const [uForm, setUForm] = useState({ id: null, reqId: requirements[0]?.id, vendor: "V1", rate: "", file: "" });
@@ -174,7 +174,7 @@ export default function QuotationsPage({ requirements, quotations, setQuotations
         <div className="flex flex-wrap gap-2">
           {requirements.filter((r) => r.status === "Sent to Vendor").map((r) => (
             <span key={r.id} className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs text-slate-600">
-              <Clock className="h-3 w-3 text-amber-500" /> {r.id} · {itemName(r.item)} · {siteName(r.site, sites)}
+              <Clock className="h-3 w-3 text-amber-500" /> {r.id} · {itemName(r.item)} · {siteName(r.site)}
             </span>
           ))}
           {requirements.filter((r) => r.status === "Sent to Vendor").length === 0 && <p className="text-xs text-slate-400">Nothing pending — all sent requirements have quotations.</p>}
@@ -186,7 +186,7 @@ export default function QuotationsPage({ requirements, quotations, setQuotations
           <div>
             <label className="mb-1 block text-xs font-medium text-slate-600">Requirement</label>
             <select disabled={!!uForm.id} value={uForm.reqId} onChange={(e) => setUForm({ ...uForm, reqId: e.target.value })} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 disabled:opacity-60">
-              {requirements.map((r) => <option key={r.id} value={r.id}>{r.id} — {itemName(r.item)} ({siteName(r.site, sites)})</option>)}
+              {requirements.map((r) => <option key={r.id} value={r.id}>{r.id} — {itemName(r.item)} ({siteName(r.site)})</option>)}
             </select>
           </div>
           <div>

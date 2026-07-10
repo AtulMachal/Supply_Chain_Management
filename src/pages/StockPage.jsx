@@ -4,7 +4,7 @@ import { siteName, itemName, itemUnit } from "../utils/helpers";
 import Card from "../components/common/Card";
 import SortableTh from "../components/common/SortableTh";
 
-export default function StockPage({ stock, siteFilter, sites }) {
+export default function StockPage({ stock, siteFilter }) {
   const [sort, setSort] = useState({ key: "item", dir: "asc" });
   const rows = useMemo(() => {
     let arr = stock.filter((s) => siteFilter === "ALL" || s.site === siteFilter);
@@ -42,7 +42,7 @@ export default function StockPage({ stock, siteFilter, sites }) {
                 return (
                   <tr key={i} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/60">
                     <td className="px-4 py-3 font-medium text-slate-700">{itemName(s.item)}</td>
-                    <td className="px-4 py-3 text-slate-600">{siteName(s.site, sites)}</td>
+                    <td className="px-4 py-3 text-slate-600">{siteName(s.site)}</td>
                     <td className="px-4 py-3 text-slate-600">{s.qty} {itemUnit(s.item)}</td>
                     <td className="px-4 py-3 text-slate-400">{s.min} {itemUnit(s.item)}</td>
                     <td className="px-4 py-3">

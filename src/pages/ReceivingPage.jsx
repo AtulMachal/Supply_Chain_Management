@@ -4,7 +4,7 @@ import { siteName, itemName, itemUnit, vendorName } from "../utils/helpers";
 import Card from "../components/common/Card";
 import EmptyState from "../components/common/EmptyState";
 
-export default function ReceivingPage({ pos, setPOs, sites }) {
+export default function ReceivingPage({ pos, setPOs }) {
   const arriving = pos.filter((p) => p.status === "Sent to Vendor" || p.status === "Approved");
 
   const updateReceipt = (poId, idx, patch) => {
@@ -25,7 +25,7 @@ export default function ReceivingPage({ pos, setPOs, sites }) {
       {arriving.length === 0 && <EmptyState icon={PackageCheck} text="No incoming deliveries to confirm right now." />}
 
       {arriving.map((p) => (
-        <Card key={p.id} title={`${p.id} — ${vendorName(p.vendor)}`} subtitle={`Delivering to ${siteName(p.site, sites)}`}>
+        <Card key={p.id} title={`${p.id} — ${vendorName(p.vendor)}`} subtitle={`Delivering to ${siteName(p.site)}`}>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>

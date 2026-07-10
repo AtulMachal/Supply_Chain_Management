@@ -1,6 +1,6 @@
 import { SITES, ITEMS, VENDORS } from "../data/mockData";
 
-export const siteName = (id, sites = SITES) => sites.find((s) => s.id === id)?.name || id;
+export const siteName = (id) => SITES.find((s) => s.id === id)?.name || id;
 export const itemName = (id) => ITEMS.find((i) => i.id === id)?.name || id;
 export const itemUnit = (id) => ITEMS.find((i) => i.id === id)?.unit || "";
 export const vendorName = (id) => VENDORS.find((v) => v.id === id)?.name || id;

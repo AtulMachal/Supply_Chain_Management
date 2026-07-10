@@ -1,8 +1,8 @@
 import React from "react";
 import { Menu, Search, Bell, User } from "lucide-react";
-import { ROLES } from "../../data/mockData";
+import { SITES, ROLES } from "../../data/mockData";
 
-export default function Topbar({ setSidebarOpen, siteFilter, setSiteFilter, role, setRole, sites }) {
+export default function Topbar({ setSidebarOpen, siteFilter, setSiteFilter, role, setRole }) {
   return (
     <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 shadow-sm">
       <button onClick={() => setSidebarOpen((s) => !s)} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100">
@@ -19,7 +19,7 @@ export default function Topbar({ setSidebarOpen, siteFilter, setSiteFilter, role
           className="w-20 sm:w-auto rounded-lg border border-slate-200 bg-slate-50 px-1 sm:px-2 py-1.5 text-[10px] sm:text-xs text-slate-600 outline-none focus:border-indigo-400"
         >
           <option value="ALL">All Sites</option>
-          {sites.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+          {SITES.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
         </select>
         <button className="relative rounded-lg p-1 sm:p-1.5 text-slate-400 hover:bg-slate-100">
           <Bell className="h-4 w-4" />

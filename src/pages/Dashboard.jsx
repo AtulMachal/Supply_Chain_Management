@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ClipboardList, ShoppingCart, Wallet, Boxes, AlertTriangle, MapPin, Eye } from "lucide-react";
-import { PIPELINE_STAGES } from "../data/mockData";
+import { SITES, PIPELINE_STAGES } from "../data/mockData";
 import { siteName, itemName, itemUnit, vendorName, inr } from "../utils/helpers";
 import { getStageFromRequirement, getStageFromPO } from "../utils/pipelineLogic";
 import Badge from "../components/common/Badge";
@@ -9,7 +9,7 @@ import PipelineTracker from "../components/common/PipelineTracker";
 import Kpi from "../components/common/Kpi";
 import Modal from "../components/common/Modal";
 
-export default function Dashboard({ requirements, pos, stock, siteFilter, setPage, sites }) {
+export default function Dashboard({ requirements, pos, stock, siteFilter, setPage }) {
   const [selectedStage, setSelectedStage] = useState(null);
 
   const reqs = requirements.filter((r) => siteFilter === "ALL" || r.site === siteFilter);
@@ -67,9 +67,9 @@ export default function Dashboard({ requirements, pos, stock, siteFilter, setPag
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <Card title="Requirements by site" className="lg:col-span-1">
           <div className="space-y-3">
-            {sites.map((s) => {
+            {SITES.map((s) => {
               const count = requirements.filter((r) => r.site === s.id).length;
-              const max = Math.max(...sites.map((x) => requirements.filter((r) => r.site === x.id).length), 1);
+              const max = Math.max(...SITES.map((x) => requirements.filter((r) => r.site === x.id).length), 1);
               return (
                 <div key={s.id}>
                   <div className="mb-1 flex items-center justify-between text-xs">
@@ -91,7 +91,7 @@ export default function Dashboard({ requirements, pos, stock, siteFilter, setPag
               <div key={p.id} className="flex flex-col sm:flex-row sm:items-center items-start justify-between gap-2 sm:gap-0 py-2.5 text-xs">
                 <div>
                   <p className="font-semibold text-slate-700">{p.id} · {vendorName(p.vendor)}</p>
-                  <p className="text-slate-400">{siteName(p.site, sites)}</p>
+                  <p className="text-slate-400">{siteName(p.site)}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge>{p.status}</Badge>
@@ -110,7 +110,7 @@ export default function Dashboard({ requirements, pos, stock, siteFilter, setPag
               <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-0 rounded-lg border border-rose-100 bg-rose-50/60 px-3 py-2.5">
                 <div>
                   <p className="text-xs font-semibold text-slate-700">{itemName(s.item)}</p>
-                  <p className="text-[11px] text-slate-500">{siteName(s.site, sites)}</p>
+                  <p className="text-[11px] text-slate-500">{siteName(s.site)}</p>
                 </div>
                 <div className="text-left sm:text-right">
                   <p className="text-xs font-bold text-rose-600">{s.qty} {itemUnit(s.item)}</p>
@@ -140,7 +140,7 @@ export default function Dashboard({ requirements, pos, stock, siteFilter, setPag
                       <Badge>{item.status}</Badge>
                     </div>
                     <p className="mt-1 text-xs text-slate-500">
-                      <MapPin className="mb-0.5 inline h-3 w-3" /> {siteName(item.site, sites)}
+                      <MapPin className="mb-0.5 inline h-3 w-3" /> {siteName(item.site)}
                       {item.vendor && ` · Vendor: ${vendorName(item.vendor)}`}
                     </p>
                   </div>

@@ -1,18 +1,18 @@
 import React, { useState, useMemo } from "react";
 import { ClipboardList, Send, Mail, MessageCircle, Plus } from "lucide-react";
-import { ITEMS, VENDORS } from "../data/mockData";
+import { SITES, ITEMS, VENDORS } from "../data/mockData";
 import { siteName, itemName, itemUnit } from "../utils/helpers";
 import Badge from "../components/common/Badge";
 import Card from "../components/common/Card";
 import Modal from "../components/common/Modal";
 import EmptyState from "../components/common/EmptyState";
 
-export default function RequirementsPage({ requirements, setRequirements, siteFilter, sites }) {
+export default function RequirementsPage({ requirements, setRequirements, siteFilter }) {
   const [showNew, setShowNew] = useState(false);
   const [sendModal, setSendModal] = useState(null);
   const [form, setForm] = useState({ site: "S1", item: "I1", qty: "", requiredBy: "" });
 
-  const grouped = sites.map((s) => ({
+  const grouped = SITES.map((s) => ({
     site: s,
     reqs: requirements.filter((r) => r.site === s.id && (siteFilter === "ALL" || r.site === siteFilter)),
   })).filter((g) => siteFilter === "ALL" || g.site.id === siteFilter);
@@ -90,7 +90,7 @@ export default function RequirementsPage({ requirements, setRequirements, siteFi
           <div>
             <label className="mb-1 block text-xs font-medium text-slate-600">Site</label>
             <select value={form.site} onChange={(e) => setForm({ ...form, site: e.target.value })} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-400">
-              {sites.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+              {SITES.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </div>
           <div>
@@ -116,7 +116,7 @@ export default function RequirementsPage({ requirements, setRequirements, siteFi
       <Modal open={!!sendModal} onClose={() => setSendModal(null)} title={`Send ${sendModal?.id} to vendors`}>
         <div className="space-y-4">
           <p className="text-xs text-slate-500">
-            {sendModal && `${sendModal.qty} ${itemUnit(sendModal.item)} of ${itemName(sendModal.item)} for ${siteName(sendModal.site, sites)}`}
+            {sendModal && `${sendModal.qty} ${itemUnit(sendModal.item)} of ${itemName(sendModal.item)} for ${siteName(sendModal.site)}`}
           </p>
           <div className="rounded-lg border border-slate-200 p-3">
             <p className="mb-2 text-xs font-medium text-slate-600">Choose vendors</p>
