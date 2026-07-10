@@ -4,7 +4,7 @@ import { siteName, itemName, itemUnit, vendorName } from "../utils/helpers";
 import Card from "../components/common/Card";
 import EmptyState from "../components/common/EmptyState";
 
-export default function DispatchPage({ pos, setPOs }) {
+export default function DispatchPage({ pos, setPOs, sites }) {
   const dispatchable = pos.filter((p) => p.status === "Sent to Vendor" || p.status === "Approved");
 
   const updateItem = (poId, idx, patch) => {
@@ -25,7 +25,7 @@ export default function DispatchPage({ pos, setPOs }) {
       {dispatchable.length === 0 && <EmptyState icon={Truck} text="No purchase orders currently out with vendors." />}
 
       {dispatchable.map((p) => (
-        <Card key={p.id} title={`${p.id} — ${vendorName(p.vendor)}`} subtitle={siteName(p.site)}>
+        <Card key={p.id} title={`${p.id} — ${vendorName(p.vendor)}`} subtitle={siteName(p.site, sites)}>
           <div className="space-y-3">
             {p.items.map((it, idx) => (
               <div key={idx} className="grid grid-cols-1 items-center gap-3 rounded-lg border border-slate-200 p-3 sm:grid-cols-5">

@@ -10,6 +10,7 @@ import {
   initialQuotations,
   initialPOs,
   initialStock,
+  SITES as initialSites,
 } from "./data/mockData";
 
 import Sidebar from "./components/layout/Sidebar";
@@ -25,6 +26,7 @@ import ReceivingPage from "./pages/ReceivingPage";
 import PaymentsPage from "./pages/PaymentsPage";
 import StockPage from "./pages/StockPage";
 import AccessPage from "./pages/AccessPage";
+import SitesPage from "./pages/SitesPage";
 
 export default function App() {
   const [role, setRole] = useState("Admin");
@@ -35,6 +37,7 @@ export default function App() {
   const [quotations, setQuotations] = useState(initialQuotations);
   const [pos, setPOs] = useState(initialPOs);
   const [stock] = useState(initialStock);
+  const [sites, setSites] = useState(initialSites);
   const [siteFilter, setSiteFilter] = useState("ALL");
 
   const perms = PERMISSIONS[role];
@@ -49,6 +52,7 @@ export default function App() {
     { key: "payments", label: "Payments & Invoices", icon: Wallet, on: perms.payments },
     { key: "stock", label: "Stock & Shortage", icon: Boxes, on: perms.stock },
     { key: "access", label: "Access Control", icon: ShieldCheck, on: perms.access },
+    { key: "sites", label: "Sites Management", icon: MapPin, on: perms.sites },
   ];
 
   return (
@@ -69,24 +73,26 @@ export default function App() {
           setSiteFilter={setSiteFilter}
           role={role}
           setRole={setRole}
+          sites={sites}
         />
 
         <main className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-5">
-          {page === "dashboard" && <Dashboard requirements={requirements} pos={pos} stock={stock} siteFilter={siteFilter} setPage={setPage} />}
+          {page === "dashboard" && <Dashboard requirements={requirements} pos={pos} stock={stock} siteFilter={siteFilter} setPage={setPage} sites={sites} />}
           {page === "requirements" && (perms.requirements ? (
-            <RequirementsPage requirements={requirements} setRequirements={setRequirements} siteFilter={siteFilter} />
+            <RequirementsPage requirements={requirements} setRequirements={setRequirements} siteFilter={siteFilter} sites={sites} />
           ) : <Locked />)}
           {page === "quotations" && (perms.quotations ? (
-            <QuotationsPage requirements={requirements} quotations={quotations} setQuotations={setQuotations} setPOs={setPOs} setRequirements={setRequirements} />
+            <QuotationsPage requirements={requirements} quotations={quotations} setQuotations={setQuotations} setPOs={setPOs} setRequirements={setRequirements} sites={sites} />
           ) : <Locked />)}
           {page === "po" && ((perms.poCreate || perms.poApprove) ? (
-            <POPage pos={pos} setPOs={setPOs} perms={perms} />
+            <POPage pos={pos} setPOs={setPOs} perms={perms} sites={sites} />
           ) : <Locked />)}
-          {page === "dispatch" && (perms.vendorDispatch ? <DispatchPage pos={pos} setPOs={setPOs} /> : <Locked />)}
-          {page === "receiving" && (perms.siteReceive ? <ReceivingPage pos={pos} setPOs={setPOs} /> : <Locked />)}
-          {page === "payments" && (perms.payments ? <PaymentsPage pos={pos} setPOs={setPOs} /> : <Locked />)}
-          {page === "stock" && (perms.stock ? <StockPage stock={stock} siteFilter={siteFilter} /> : <Locked />)}
+          {page === "dispatch" && (perms.vendorDispatch ? <DispatchPage pos={pos} setPOs={setPOs} sites={sites} /> : <Locked />)}
+          {page === "receiving" && (perms.siteReceive ? <ReceivingPage pos={pos} setPOs={setPOs} sites={sites} /> : <Locked />)}
+          {page === "payments" && (perms.payments ? <PaymentsPage pos={pos} setPOs={setPOs} sites={sites} /> : <Locked />)}
+          {page === "stock" && (perms.stock ? <StockPage stock={stock} siteFilter={siteFilter} sites={sites} /> : <Locked />)}
           {page === "access" && (perms.access ? <AccessPage /> : <Locked />)}
+          {page === "sites" && (perms.sites ? <SitesPage sites={sites} setSites={setSites} /> : <Locked />)}
         </main>
       </div>
     </div>

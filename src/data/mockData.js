@@ -1,7 +1,7 @@
 export const SITES = [
-  { id: "S1", name: "Site A — Riverside Tower" },
-  { id: "S2", name: "Site B — Orchid Residency" },
-  { id: "S3", name: "Site C — Industrial Warehouse" },
+  { id: "S1", name: "Site A — Riverside Tower", address: "Plot 42, Riverside, North Block", manager: "Ravi Kumar", status: "Active" },
+  { id: "S2", name: "Site B — Orchid Residency", address: "Phase 2, Orchid Lane, East Sector", manager: "Anita Desai", status: "Active" },
+  { id: "S3", name: "Site C — Industrial Warehouse", address: "Sector 18, MIDC Industrial Area", manager: "Vikram Singh", status: "Completed" },
 ];
 
 export const ITEMS = [
@@ -25,11 +25,11 @@ export const VENDORS = [
 export const ROLES = ["Admin", "Procurement Officer", "Vendor Desk", "Site Supervisor", "Store Keeper"];
 
 export const PERMISSIONS = {
-  "Admin": { requirements: true, quotations: true, poCreate: true, poApprove: true, vendorDispatch: true, siteReceive: true, payments: true, stock: true, access: true },
-  "Procurement Officer": { requirements: true, quotations: true, poCreate: true, poApprove: false, vendorDispatch: false, siteReceive: false, payments: true, stock: false, access: false },
-  "Vendor Desk": { requirements: false, quotations: true, poCreate: false, poApprove: false, vendorDispatch: true, siteReceive: false, payments: false, stock: false, access: false },
-  "Site Supervisor": { requirements: true, quotations: false, poCreate: false, poApprove: false, vendorDispatch: false, siteReceive: true, payments: false, stock: true, access: false },
-  "Store Keeper": { requirements: false, quotations: false, poCreate: false, poApprove: false, vendorDispatch: false, siteReceive: false, payments: false, stock: true, access: false },
+  "Admin": { requirements: true, quotations: true, poCreate: true, poApprove: true, vendorDispatch: true, siteReceive: true, payments: true, stock: true, access: true, sites: true },
+  "Procurement Officer": { requirements: true, quotations: true, poCreate: true, poApprove: false, vendorDispatch: false, siteReceive: false, payments: true, stock: false, access: false, sites: false },
+  "Vendor Desk": { requirements: false, quotations: true, poCreate: false, poApprove: false, vendorDispatch: true, siteReceive: false, payments: false, stock: false, access: false, sites: false },
+  "Site Supervisor": { requirements: true, quotations: false, poCreate: false, poApprove: false, vendorDispatch: false, siteReceive: true, payments: false, stock: true, access: false, sites: false },
+  "Store Keeper": { requirements: false, quotations: false, poCreate: false, poApprove: false, vendorDispatch: false, siteReceive: false, payments: false, stock: true, access: false, sites: false },
 };
 
 export const initialRequirements = [

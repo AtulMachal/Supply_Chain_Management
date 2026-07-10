@@ -6,7 +6,7 @@ import Card from "../components/common/Card";
 import PipelineTracker from "../components/common/PipelineTracker";
 import Modal from "../components/common/Modal";
 
-export default function POPage({ pos, setPOs, perms }) {
+export default function POPage({ pos, setPOs, perms, sites }) {
   const [detail, setDetail] = useState(null);
   const [sendModal, setSendModal] = useState(null);
 
@@ -25,7 +25,7 @@ export default function POPage({ pos, setPOs, perms }) {
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
               <div>
                 <p className="text-sm font-bold text-slate-800">{p.id} <span className="ml-1 font-normal text-slate-400">· {vendorName(p.vendor)}</span></p>
-                <p className="text-xs text-slate-500 flex items-center gap-1"><MapPin className="h-3 w-3" />{siteName(p.site)} · created {p.createdOn}</p>
+                <p className="text-xs text-slate-500 flex items-center gap-1"><MapPin className="h-3 w-3" />{siteName(p.site, sites)} · created {p.createdOn}</p>
               </div>
               <div className="flex items-center gap-2">
                 <Badge>{p.status}</Badge>
@@ -97,7 +97,7 @@ export default function POPage({ pos, setPOs, perms }) {
             } />
             <div className="grid grid-cols-2 gap-3 text-xs sm:grid-cols-4">
               <div className="rounded-lg bg-slate-50 p-3"><p className="text-slate-400">Vendor</p><p className="font-semibold text-slate-700">{vendorName(detail.vendor)}</p></div>
-              <div className="rounded-lg bg-slate-50 p-3"><p className="text-slate-400">Site</p><p className="font-semibold text-slate-700">{siteName(detail.site)}</p></div>
+              <div className="rounded-lg bg-slate-50 p-3"><p className="text-slate-400">Site</p><p className="font-semibold text-slate-700">{siteName(detail.site, sites)}</p></div>
               <div className="rounded-lg bg-slate-50 p-3"><p className="text-slate-400">Approved By</p><p className="font-semibold text-slate-700">{detail.approvedBy || "—"}</p></div>
               <div className="rounded-lg bg-slate-50 p-3"><p className="text-slate-400">Invoice</p><p className="font-semibold text-slate-700">{detail.invoiceReceived ? detail.invoiceNo : "Not received"}</p></div>
             </div>
