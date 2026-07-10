@@ -33,7 +33,8 @@ export default function POPage({ pos, setPOs, perms }) {
               </div>
             </div>
             <div className="p-5">
-              <table className="w-full text-xs">
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
                 <thead>
                   <tr className="text-left text-slate-400">
                     <th className="pb-2 font-medium">Item</th>
@@ -55,6 +56,7 @@ export default function POPage({ pos, setPOs, perms }) {
                   ))}
                 </tbody>
               </table>
+              </div>
 
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 {perms.poApprove && p.status === "Pending Approval" && (
@@ -104,7 +106,7 @@ export default function POPage({ pos, setPOs, perms }) {
       </Modal>
 
       <Modal open={!!sendModal} onClose={() => setSendModal(null)} title={`Send ${sendModal?.id} to ${sendModal ? vendorName(sendModal.vendor) : ""}`}>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button onClick={() => { updateStatus(sendModal.id, "Sent to Vendor"); setSendModal(null); }} className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700">
             <MessageCircle className="h-4 w-4" /> WhatsApp
           </button>

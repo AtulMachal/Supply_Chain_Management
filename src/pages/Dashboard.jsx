@@ -49,7 +49,7 @@ export default function Dashboard({ requirements, pos, stock, siteFilter, setPag
         <p className="text-xs text-slate-500">Live status across requirements, procurement, dispatch and site stock.</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Kpi onClick={() => setPage("requirements")} icon={ClipboardList} label="Open Requirements" value={openReqs} hint="Not yet converted to PO" tone="indigo" />
         <Kpi onClick={() => setPage("po")} icon={ShoppingCart} label="POs Pending Approval" value={pendingApproval} hint="Awaiting admin sign-off" tone="amber" />
         <Kpi onClick={() => setPage("payments")} icon={Wallet} label="Payments Pending" value={pendingPayments} hint="Across active purchase orders" tone="rose" />
@@ -88,7 +88,7 @@ export default function Dashboard({ requirements, pos, stock, siteFilter, setPag
         <Card title="Active purchase orders" className="lg:col-span-2">
           <div className="divide-y divide-slate-100">
             {pos.map((p) => (
-              <div key={p.id} className="flex items-center justify-between py-2.5 text-xs">
+              <div key={p.id} className="flex flex-col sm:flex-row sm:items-center items-start justify-between gap-2 sm:gap-0 py-2.5 text-xs">
                 <div>
                   <p className="font-semibold text-slate-700">{p.id} · {vendorName(p.vendor)}</p>
                   <p className="text-slate-400">{siteName(p.site)}</p>
@@ -107,12 +107,12 @@ export default function Dashboard({ requirements, pos, stock, siteFilter, setPag
         <Card title="Shortage alerts" right={<AlertTriangle className="h-4 w-4 text-rose-500" />}>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {shortage.map((s, i) => (
-              <div key={i} className="flex items-center justify-between rounded-lg border border-rose-100 bg-rose-50/60 px-3 py-2.5">
+              <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-0 rounded-lg border border-rose-100 bg-rose-50/60 px-3 py-2.5">
                 <div>
                   <p className="text-xs font-semibold text-slate-700">{itemName(s.item)}</p>
                   <p className="text-[11px] text-slate-500">{siteName(s.site)}</p>
                 </div>
-                <div className="text-right">
+                <div className="text-left sm:text-right">
                   <p className="text-xs font-bold text-rose-600">{s.qty} {itemUnit(s.item)}</p>
                   <p className="text-[10px] text-slate-400">min {s.min}</p>
                 </div>
@@ -132,9 +132,9 @@ export default function Dashboard({ requirements, pos, stock, siteFilter, setPag
           ) : (
             <div className="divide-y divide-slate-100 rounded-lg border border-slate-200 bg-white shadow-sm">
               {itemsInSelectedStage.map((item) => (
-                <div key={item.id} className="flex items-center justify-between p-4 text-sm">
+                <div key={item.id} className="flex flex-col sm:flex-row sm:items-center items-start justify-between gap-3 sm:gap-0 p-4 text-sm">
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <p className="font-semibold text-slate-700">{item.id}</p>
                       <Badge tone={item.type === "PO" ? "indigo" : "emerald"}>{item.type}</Badge>
                       <Badge>{item.status}</Badge>
@@ -144,7 +144,7 @@ export default function Dashboard({ requirements, pos, stock, siteFilter, setPag
                       {item.vendor && ` · Vendor: ${vendorName(item.vendor)}`}
                     </p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-left sm:text-right">
                     {item.type === 'Requirement' ? (
                       <p className="font-semibold text-slate-700">{item.qty} {itemUnit(item.item)} {itemName(item.item)}</p>
                     ) : (

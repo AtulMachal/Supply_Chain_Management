@@ -1,9 +1,16 @@
 import React from "react";
 import { Lock } from "lucide-react";
 
-export default function Sidebar({ sidebarOpen, page, setPage, role, NAV }) {
+export default function Sidebar({ sidebarOpen, setSidebarOpen, page, setPage, role, NAV }) {
+  const handleNavClick = (key) => {
+    setPage(key);
+    if (window.innerWidth < 768) {
+      setSidebarOpen(false);
+    }
+  };
+
   return (
-    <aside className={`${sidebarOpen ? "w-64" : "w-16"} shrink-0 bg-slate-900 transition-all duration-200 relative z-20`}>
+    <aside className={`fixed inset-y-0 left-0 z-40 flex flex-col shrink-0 transform bg-slate-900 transition-transform duration-200 md:relative md:translate-x-0 ${sidebarOpen ? "translate-x-0 w-64" : "-translate-x-full md:w-16"}`}>
       <div className="flex h-14 items-center gap-2 border-b border-slate-800 px-4">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white">SC</div>
         {sidebarOpen && <span className="truncate text-sm font-semibold text-white">SupplyLine</span>}
@@ -15,7 +22,7 @@ export default function Sidebar({ sidebarOpen, page, setPage, role, NAV }) {
           return (
             <button
               key={n.key}
-              onClick={() => setPage(n.key)}
+              onClick={() => handleNavClick(n.key)}
               className={`group relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors
                 ${active ? "bg-indigo-600/15 text-white ring-1 ring-inset ring-indigo-500/40" : "text-slate-400 hover:bg-slate-800 hover:text-slate-200"}`}
             >
@@ -38,7 +45,7 @@ export default function Sidebar({ sidebarOpen, page, setPage, role, NAV }) {
           return (
             <button
               key={n.key}
-              onClick={() => setPage(n.key)}
+              onClick={() => handleNavClick(n.key)}
               className={`group relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors
                 ${active ? "bg-indigo-600/15 text-slate-400 ring-1 ring-inset ring-indigo-500/40" : "text-slate-600 hover:bg-slate-800/50 hover:text-slate-400"}`}
             >

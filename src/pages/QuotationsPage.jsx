@@ -88,7 +88,7 @@ export default function QuotationsPage({ requirements, quotations, setQuotations
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
         <div>
           <h1 className="text-lg font-bold text-slate-800">Quotations & Rate Comparison</h1>
           <p className="text-xs text-slate-500">Upload vendor quotations and compare rates item-wise before creating a PO.</p>

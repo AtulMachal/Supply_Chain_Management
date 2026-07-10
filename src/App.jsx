@@ -52,10 +52,17 @@ export default function App() {
   ];
 
   return (
-    <div className="flex h-full min-h-[720px] w-full bg-slate-50 text-slate-800" style={{ fontFamily: "Inter, ui-sans-serif, system-ui" }}>
-      <Sidebar sidebarOpen={sidebarOpen} page={page} setPage={setPage} role={role} NAV={NAV} />
+    <div className="flex h-[100dvh] w-full overflow-hidden bg-slate-50 text-slate-800" style={{ fontFamily: "Inter, ui-sans-serif, system-ui" }}>
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 z-30 bg-slate-900/50 md:hidden" 
+          onClick={() => setSidebarOpen(false)} 
+        />
+      )}
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} page={page} setPage={setPage} role={role} NAV={NAV} />
 
-      <div className="flex min-h-0 flex-1 flex-col">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         <Topbar
           setSidebarOpen={setSidebarOpen}
           siteFilter={siteFilter}
@@ -64,7 +71,7 @@ export default function App() {
           setRole={setRole}
         />
 
-        <main className="min-h-0 flex-1 overflow-y-auto p-5">
+        <main className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-5">
           {page === "dashboard" && <Dashboard requirements={requirements} pos={pos} stock={stock} siteFilter={siteFilter} setPage={setPage} />}
           {page === "requirements" && (perms.requirements ? (
             <RequirementsPage requirements={requirements} setRequirements={setRequirements} siteFilter={siteFilter} />
